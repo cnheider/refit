@@ -12,4 +12,5 @@ google-api-python-client==1.5.1
 httplib2
 oauth2client
 numpy
+scipy
 sklearn
