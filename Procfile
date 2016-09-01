@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn refit/app:app
