@@ -20,7 +20,7 @@
     "tests"
   ],
   "dependencies": {
-    "d3": "3.5.5",
+    "d3": "latest",
     "d3-queue": "latest",
     "d3-tip": "latest",
     "bootstrap": "latest",

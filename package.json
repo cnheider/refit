@@ -10,8 +10,8 @@
     "npm": "3.8.6"
   },
   "dependencies": {
-    "bower": "1.7.9",
-    "d3": "3.5.5",
+    "bower": "latest",
+    "d3": "latest",
     "d3-queue": "latest",
     "d3-tip": "latest",
     "bootstrap": "latest",
