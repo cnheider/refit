@@ -1,1 +1,1 @@
-web: gunicorn refit/app:app
+web: python refit/app.py
