@@ -11,6 +11,11 @@
   },
   "dependencies": {
     "bower": "1.7.9",
-    "d3": "3.5.5"
+    "d3": "3.5.5",
+    "d3-queue": "latest",
+    "d3-tip": "latest",
+    "bootstrap": "latest",
+    "bootstrap-toggle": "latest",
+    "jquery": "latest"
   }
 }

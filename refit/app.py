@@ -3,6 +3,7 @@ import json
 import flask
 from flask import (Flask, Response, abort, flash, g, jsonify, redirect,
                    render_template, request, session, url_for)
+from flask.ext.bower import Bower
 from oauth2client.contrib.flask_util import UserOAuth2
 
 from config import (DEBUG, GOOGLE_FIT_SCOPES, GOOGLE_OAUTH2_CLIENT_ID,
@@ -17,6 +18,7 @@ app.config['GOOGLE_OAUTH2_CLIENT_SECRET'] = GOOGLE_OAUTH2_CLIENT_SECRET
 app.config['USERNAME'] = USERNAME
 app.config['PASSWORD'] = PASSWORD
 oauth2 = UserOAuth2(app)
+Bower(app)
 
 
 @app.route('/login', methods=['GET', 'POST'])
