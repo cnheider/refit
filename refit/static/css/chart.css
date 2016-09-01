@@ -1,0 +1,23 @@
+  .y.axis line,
+  .y.axis path {
+    fill: none;
+    stroke: #000;
+  }
+
+  .y.axis text {
+    font-size: 12px;
+  }
+
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .line {}
+
+  path {
+    stroke-width: 1;
+    fill: none;
+  }

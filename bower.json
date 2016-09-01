@@ -1,0 +1,27 @@
+{
+  "name": "refit",
+  "authors": [
+    "cnHeider <mrnaah@gmail.com>"
+  ],
+  "description": "Personal trainer",
+  "main": "",
+  "keywords": [
+    "fit"
+  ],
+  "license": "MIT",
+  "homepage": "cnheider.net",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "static/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.2.0",
+    "jquery": "2.1.1",
+    "d3": "4.2.2"
+  }
+}
