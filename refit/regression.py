@@ -22,8 +22,12 @@ def train(data):
 
   regr.fit(datearray.reshape(datearray.shape[0], 1), days.values())
 
-  print(regr.coef_)
+  return regr.coef_
 
 
-def predict():
-  return regr.predict(np.array([[datetime.datetime.now().day]]))
+def predict_now_and_tommorow():
+  return regr.predict(np.array([[datetime.datetime.now().day], [(datetime.date.today() + datetime.timedelta(1)).day]]))
+
+
+def predict(date):
+  return regr.predict(np.array([[date]]))

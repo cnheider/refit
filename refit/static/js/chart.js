@@ -203,6 +203,9 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
     chart.append("path")
       .datum(stepsJson)
       .attr("class", "line")
+      .attr("id", function (d) {
+        return "line" + extract_data_type_name(d);
+      })
       .attr("d", int_line)
       .style("stroke", function (d) {
         return color(extract_data_type_name(d));
@@ -227,6 +230,9 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
     chart.append("path")
       .datum(hrJson)
       .attr("class", "line")
+      .attr("id", function (d) {
+        return "line" + extract_data_type_name(d);
+      })
       .attr("d", fp_line)
       .style("stroke", function (d) {
         return color(extract_data_type_name(d));
@@ -265,17 +271,21 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
       });
   }
   var append_points = function () {
-    tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
+    int_tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
       return extract_int_val(d);
     });
 
-    points = chart.selectAll(".point")
+    fp_tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
+      return extract_fp_val(d);
+    });
+
+    step_points = chart.selectAll(".point")
       .data(stepsJson)
       .enter().append("circle")
       .attr("class", "point")
       .attr("clip-path", "url(#clip)")
       .attr("r", function (d) {
-        return 5;
+        return 3;
       })
       .attr("cx", function (d) {
         return x(extract_date(d));
@@ -283,8 +293,25 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
       .attr("cy", function (d) {
         return y_left(extract_int_val(d));
       })
-      .call(tip).on('mouseover', tip.show)
-      .on('mouseout', tip.hide);
+      .call(int_tip).on('mouseover', int_tip.show)
+      .on('mouseout', int_tip.hide);
+
+    fp_points = chart.selectAll(".points")
+      .data(hrJson)
+      .enter().append("circle")
+      .attr("class", "points")
+      .attr("clip-path", "url(#clip)")
+      .attr("r", function (d) {
+        return 3;
+      })
+      .attr("cx", function (d) {
+        return x(extract_date(d));
+      })
+      .attr("cy", function (d) {
+        return y_right(extract_fp_val(d));
+      })
+      .call(fp_tip).on('mouseover', fp_tip.show)
+      .on('mouseout', fp_tip.hide);
   }
 
   // Helper functions

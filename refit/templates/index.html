@@ -7,11 +7,11 @@
     <title>Refit Visualizer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href={{ url_for( 'bower.static', filename='bootstrap/dist/css/bootstrap.min.css' ) }} rel="stylesheet" media="screen">
-    <link rel="stylesheet" href={{ url_for( 'static', filename='./css/keen-dashboards.css' ) }}>
+    <link rel="stylesheet" href={{ url_for( 'static', filename='css/keen-dashboards.css' ) }}>
     <link href={{ url_for( 'bower.static', filename='bootstrap-toggle/css/bootstrap-toggle.min.css' ) }} rel="stylesheet">
     <link href={{ url_for( 'static', filename='./css/main.css' ) }} rel="stylesheet" media="screen">
     <link href={{ url_for( 'static', filename='./css/chart.css' ) }} rel="stylesheet" media="screen">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='./images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
   </head>
 
   <body>
@@ -20,7 +20,7 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <a class="navbar-brand" href="#">
-            <img src="{{ url_for('static', filename='./images/refit.png') }}" alt="Refit" height="26" /> Refit
+            Refit
           </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -32,39 +32,18 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-2 sidebar">
-          <!--<div class="checkbox">
-            <label>
-                <input id="all" type="checkbox" data-toggle="toggle" data-onstyle="primary">
-                <button onclick="toogleOff()"></button>
-                <script>
-                  function toogleOff() {
-                      console.log("toogle");
-                      $('path').css('display','none')
-                    }
-                </script>
-                <button onclick="toogleOn()"></button>
-                <script>
-                  function toogleOn() {
-                      console.log("toogle");
-                      $('path').css('display','block')
-                    }
-                </script>
-                All
-              </label>
-          </div>-->
           <div class="checkbox">
             <label>
               <span class="glyphicon glyphicon-flash"></span>
               RI
             </label>
-            <input type="checkbox" data-toggle="toggle" data-onstyle="success">
+            <input type="checkbox" data-toggle="toggle" data-onstyle="success" style="float: left;">
           </div>
           <div class="checkbox">
             <label>
               <span class="glyphicon glyphicon-road"></span>
-              Steps
-            </label>
-            <input type="checkbox" data-toggle="toggle" data-onstyle="info">
+            </label> Steps
+            <input id="toggle-steps" type="checkbox" data-toggle="toggle" data-onstyle="info">
           </div>
           <div class="checkbox">
             <label>
@@ -78,7 +57,7 @@
               <span class="glyphicon glyphicon-heart"></span>
               HR
             </label>
-            <input type="checkbox" data-toggle="toggle" data-onstyle="default">
+            <input id="toggle-heart" type="checkbox" data-toggle="toggle" data-onstyle="default">
           </div>
           <div class="checkbox">
             <label>
@@ -120,7 +99,8 @@
     <script src={{ url_for( 'bower.static', filename='d3/d3.min.js' ) }}></script>
     <script src={{ url_for( 'bower.static', filename='d3-queue/d3-queue.js' ) }}></script>
     <script src={{ url_for( 'bower.static', filename='d3-tip/index.js' ) }}></script>
-    <script src={{ url_for( 'static', filename='./js/chart.js' ) }}></script>
+    <script src={{ url_for( 'static', filename='js/chart.js' ) }}></script>
+    <script src={{ url_for( 'static', filename='js/chart-toogle.js' ) }}></script>
 
     <script>
       d3.queue()
