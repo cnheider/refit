@@ -7,9 +7,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import datetime
 
-import httplib2
 import pandas as pd
-from apiclient import discovery
 
 from config import (DATA_SOURCE_ID_CAL1, DATA_SOURCE_ID_HR,
                     DATA_SOURCE_ID_SLEEP, DATA_SOURCE_ID_STEPS,
@@ -99,11 +97,8 @@ def get_cal_consumed(oauth2, timestamps=get_start_and_end_timestamps()):
     return
 
 
-def get_fitness_data(oauth2, timestamps, data_source_id):
+def get_fitness_data(service, timestamps, data_source_id):
   """Shows basic usage of the Fitness API. Creates a Fitness API service object and outputs a list of data points."""
-  credentials = oauth2.credentials
-  http = credentials.authorize(httplib2.Http())
-  service = discovery.build('fitness', 'v1', http=http)
 
   # Data Source ID
   data_set_id = '{0}-{1}'.format(timestamps[0], timestamps[1])
@@ -113,11 +108,7 @@ def get_fitness_data(oauth2, timestamps, data_source_id):
   return results
 
 
-def get_fitness_data_sources_list(oauth2):
-  credentials = oauth2.credentials
-  http = credentials.authorize(httplib2.Http())
-  service = discovery.build('fitness', 'v1', http=http)
-
+def get_fitness_data_sources_list(service):
   results = service.users().dataSources().list(userId='me').execute()
 
   return results

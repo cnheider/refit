@@ -1,4 +1,4 @@
-function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json, IcontainerId) {
+function Chart(error, dataJson, IcontainerId) {
   // Private variables
   // Declarations
   var containerId;

@@ -1,4 +1,4 @@
-function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json, IcontainerId) {
+function Chart(error, dataJson, IcontainerId) {
   // Private variables
   // Declarations
   var containerId;
@@ -22,14 +22,7 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
       return x(extract_date(d));
     })
     .y(function (d) {
-      return y_left(extract_int_val(d));
-    });
-  var fp_line = d3.line()
-    .x(function (d) {
-      return x(extract_date(d));
-    })
-    .y(function (d) {
-      return y_right(extract_fp_val(d));
+      return y(extract_int_val(d));
     });
 
   // Initialisations
@@ -40,13 +33,10 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
     update_dimensions_derived_from_container();
     append_svg_child();
     x_axis_reinit();
-    y_axis_left_reinit();
-    y_axis_right_reinit();
+    y_axis_reinit();
     append_x_axis();
-    append_y_axis_left();
-    append_y_axis_right();
+    append_y_axis();
     append_lines();
-    append_legend();
     append_points();
 
   }
@@ -54,28 +44,19 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
     x = d3.scaleTime()
       .range([0, width]);
 
-    x.domain(d3.extent(hrJson, extract_date));
+    x.domain(d3.extent(dataJson, extract_date));
 
     x_axis = d3.axisBottom()
       .scale(x)
   }
-  var y_axis_left_reinit = function () {
-    y_left = d3.scaleLinear()
+  var y_axis_reinit = function () {
+    y = d3.scaleLinear()
       .range([height, 0]);
 
-    y_left.domain(d3.extent(stepsJson, extract_int_val));
+    y.domain(d3.extent(dataJson, extract_int_val));
 
-    y_axis_left = d3.axisLeft()
-      .scale(y_left)
-  }
-  var y_axis_right_reinit = function () {
-    y_right = d3.scaleLinear()
-      .range([height, 0]);
-
-    y_right.domain(d3.extent(hrJson, extract_fp_val));
-
-    y_axis_right = d3.axisRight()
-      .scale(y_right)
+    y_axis = d3.axisLeft()
+      .scale(y)
   }
 
   // Event handlers
@@ -114,11 +95,11 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
       .style("text-anchor", "end")
       .text("Date");
   }
-  var append_y_axis_left = function () {
+  var append_y_axis = function () {
     chart.append("svg:g")
       .attr("class", "y axis")
       //.attr("transform", "translate(50,0)")
-      .call(y_axis_left)
+      .call(y_axis)
       .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
@@ -126,21 +107,9 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
       .style("text-anchor", "end")
       .text("Steps");
   }
-  var append_y_axis_right = function () {
-    chart.append("svg:g")
-      .attr("class", "y axis")
-      .attr("transform", "translate(" + width + ",0)")
-      .call(y_axis_right)
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", -12)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("HR");
-  }
   var append_lines = function () {
     chart.append("path")
-      .datum(stepsJson)
+      .datum(dataJson)
       .attr("class", "line")
       .attr("id", function (d) {
         return "line" + extract_data_type_name(d);
@@ -149,77 +118,15 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
       .style("stroke", function (d) {
         return color(extract_data_type_name(d));
       });
-
-    chart.append("path")
-      .datum(hrJson)
-      .attr("class", "line")
-      .attr("id", function (d) {
-        return "line" + extract_data_type_name(d);
-      })
-      .attr("d", fp_line)
-      .style("stroke", function (d) {
-        return color(extract_data_type_name(d));
-      });
-
-    /*chart.append("path")
-        .datum(sleepJson)
-        .attr("class", "line")
-        .attr("d", int_line)
-        .style("stroke", function (d) {
-          return color(extract_data_type_name(d));
-        });
-*/
-    /*chart.append("path")
-    .datum(weightJson)
-    .attr("class", "line")
-    .attr("d", fp_line)
-    .style("stroke", function (d) {
-      return color(extract_data_type_name(d));
-    });
-
-    chart.append("path")
-      .datum(cal_burned_json)
-      .attr("class", "line")
-      .attr("d", fp_line)
-      .style("stroke", function (d) {
-        return color(extract_data_type_name(d));
-      });*/
   }
-  var append_legend = function () {
-    var legend = chart.selectAll(".legend")
-      .data(color.domain())
-      .enter().append("g")
-      .attr("class", "legend")
-      .attr("transform", function (d, i) {
-        return "translate(0," + i * 20 + ")";
-      });
 
-    legend.append("rect")
-      .attr("x", width - 18 - 20)
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color);
-
-    legend.append("text")
-      .attr("x", width - 24 - 20)
-      .attr("y", 9)
-      .attr("dy", ".35em")
-      .style("text-anchor", "end")
-      .text(function (d) {
-        return d;
-      });
-  }
   var append_points = function () {
     int_tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
       return extract_int_val(d);
     });
 
-    fp_tip = d3.tip().attr('class', 'd3-tip').html(function (d) {
-      return extract_fp_val(d);
-    });
-
-    step_points = chart.selectAll(".point")
-      .data(stepsJson)
+    points = chart.selectAll(".point")
+      .data(dataJson)
       .enter().append("circle")
       .attr("class", "point")
       .attr("clip-path", "url(#clip)")
@@ -230,27 +137,10 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
         return x(extract_date(d));
       })
       .attr("cy", function (d) {
-        return y_left(extract_int_val(d));
+        return y(extract_int_val(d));
       })
       .call(int_tip).on('mouseover', int_tip.show)
       .on('mouseout', int_tip.hide);
-
-    fp_points = chart.selectAll(".points")
-      .data(hrJson)
-      .enter().append("circle")
-      .attr("class", "points")
-      .attr("clip-path", "url(#clip)")
-      .attr("r", function (d) {
-        return 3;
-      })
-      .attr("cx", function (d) {
-        return x(extract_date(d));
-      })
-      .attr("cy", function (d) {
-        return y_right(extract_fp_val(d));
-      })
-      .call(fp_tip).on('mouseover', fp_tip.show)
-      .on('mouseout', fp_tip.hide);
   }
 
   // Helper functions
@@ -260,10 +150,6 @@ function Chart(error, stepsJson, hrJson, sleepJson, weightJson, cal_burned_json,
 
   function extract_int_val(d) { //Integer value
     return d['value'][0]['intVal'];
-  }
-
-  function extract_fp_val(d) { //Floating point value
-    return d['value'][0]['fpVal'];
   }
 
   function extract_data_type_name(d) {

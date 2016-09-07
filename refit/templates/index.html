@@ -25,6 +25,9 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">{{ google_fit_user }}</a></p>
+          <form action="/signout">
+            <button type="submit" class="btn btn-default navbar-btn navbar-right" href="signout">Sign Out</button>
+          </form>
         </div>
       </div>
     </nav>
@@ -36,6 +39,13 @@
             <label>
               <span class="glyphicon glyphicon-flash"></span>
               RI
+            </label>
+            <input type="checkbox" data-toggle="toggle" data-onstyle="success" style="float: left;">
+          </div>
+          <div class="checkbox">
+            <label>
+              <span class="glyphicon glyphicon-flash"></span>
+              Predict
             </label>
             <input type="checkbox" data-toggle="toggle" data-onstyle="success" style="float: left;">
           </div>
@@ -73,6 +83,7 @@
             </label>
             <input type="checkbox" data-toggle="toggle">
           </div>
+          <div id='checkboxes'></div>
         </div>
         <div class="col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Dashboard</h1>
@@ -80,18 +91,22 @@
             <div id="chart1" style="height:100%;" width="100%">
             </div>
           </div>
-          <div class="row" style="height: 160px;">
+          <div class="row" style="height: 150px;">
             <div id="details">
               <hr/> Details
+              <div id="predictions">
+              </div>
             </div>
             </td>
           </div>
+          <!--<div class="row">
+            <footer>
+              Christian Heider Nielsen - <a href="http://cnheider.net">cnheider.net</a>
+            </footer>
+          </div>-->
         </div>
       </div>
     </div>
-    <footer>
-      Christian Heider Nielsen - <a href="http://cnheider.net">cnheider.net</a>
-    </footer>
 
     <script src={{ url_for( 'bower.static', filename='jquery/dist/jquery.min.js' ) }}></script>
     <script src={{ url_for( 'bower.static', filename='bootstrap/dist/js/bootstrap.min.js' ) }}></script>
@@ -99,19 +114,42 @@
     <script src={{ url_for( 'bower.static', filename='d3/d3.min.js' ) }}></script>
     <script src={{ url_for( 'bower.static', filename='d3-queue/d3-queue.js' ) }}></script>
     <script src={{ url_for( 'bower.static', filename='d3-tip/index.js' ) }}></script>
-    <script src={{ url_for( 'static', filename='js/chart.js' ) }}></script>
+    <script src={{ url_for( 'static', filename='js/chart2.js' ) }}></script>
     <script src={{ url_for( 'static', filename='js/chart-toogle.js' ) }}></script>
 
     <script>
       d3.queue()
         .defer(d3.json, "/data/steps")
-        .defer(d3.json, "/data/hr")
-        .defer(d3.json, "/data/sleep")
-        .defer(d3.json, "/data/cal/burned")
-        .defer(d3.json, "/data/weight")
-        .await(function(error, steps, hr, sleep, cal, weight) {
-          new Chart(error, steps, hr, sleep, cal, weight, "chart1");
+        //.defer(d3.json, "/data/hr")
+        //.defer(d3.json, "/data/sleep")
+        //.defer(d3.json, "/data/cal/burned")
+        //.defer(d3.json, "/data/weight")
+        //.await(function(error, steps, hr, sleep, cal, weight) {
+        //  new Chart(error, steps, hr, sleep, cal, weight, "chart1");
+        .await(function(error, steps) {
+          new Chart(error, steps, "chart1");
         });
+      $.getJSON("/data", function(data) {
+        var items = [];
+        $.each(data['dataSource'], function(key, val) {
+          items.push("<li id='" + key + "'>" + val['dataStreamId'] + "</li>");
+        });
+        $("<ul/>", {
+          "class": "my-new-list",
+          html: items.join("")
+        }).appendTo("#checkboxes");
+      });
+      $.getJSON("/data/steps/predict", function(data) {
+        console.log(data[0]);
+        var items = [];
+        $.each(data[0]['value'], function(key, val) {
+          items.push("<li id='" + key + "'>" + val['intVal'] + "</li>");
+        });
+        $("<ul/>", {
+          "class": "my-new-list",
+          html: items.join("")
+        }).appendTo("#predictions");
+      });
     </script>
   </body>
 
